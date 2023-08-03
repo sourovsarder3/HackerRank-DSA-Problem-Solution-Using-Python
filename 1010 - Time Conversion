@@ -1,0 +1,32 @@
+import math
+import os
+import random
+import re
+import sys
+
+
+def timeConversion(s):
+    li = list(map(str, s.split(':')))
+    sec, ap = li[2][:2], li[2][2:]
+
+    if ap == 'AM':
+        if li[0] == '12':
+            return f'00:{li[1]}:{sec}'
+        else:
+            return f'{li[0]}:{li[1]}:{sec}'
+    else:
+        if li[0] == '12':
+            return f'{li[0]}:{li[1]}:{sec}'
+        else:
+            return f'{str(int(li[0])+12)}:{li[1]}:{sec}'
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    s = input()
+
+    result = timeConversion(s)
+
+    fptr.write(result + '\n')
+
+    fptr.close()
