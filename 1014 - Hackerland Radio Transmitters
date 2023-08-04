@@ -1,0 +1,46 @@
+import math
+import os
+import random
+import re
+import sys
+
+
+def hackerlandRadioTransmitters(x, k):
+    x = sorted(x)
+    remaining_distace = k
+    max_distance = 0
+    transmitter_count = 0
+    
+    for i in range(len(x)-1):
+        if x[i] <= max_distance:
+            continue
+        else:
+            if x[i+1] <= x[i]+remaining_distace:
+                remaining_distace = x[i]+remaining_distace-x[i+1]
+            else:
+                transmitter_count += 1
+                remaining_distace = k
+                max_distance = x[i]+k
+    
+    if x[-1] > max_distance:
+        transmitter_count += 1
+    
+    return transmitter_count
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    first_multiple_input = input().rstrip().split()
+
+    n = int(first_multiple_input[0])
+
+    k = int(first_multiple_input[1])
+
+    x = list(map(int, input().rstrip().split()))
+
+    result = hackerlandRadioTransmitters(x, k)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()
+ 
