@@ -1,0 +1,71 @@
+import math
+import os
+import random
+import re
+import sys
+
+def gridlandMetro(n, m, k, track):
+    if k == 0:
+        return n*m
+    else:
+        track = sorted(track)
+        unique_track_count = 1
+        last_track = track[0][0]
+        number_of_cells = 0
+        last_stopped_cell = 0
+        minus = 0
+
+        for i in range(len(track)-1):
+            if track[i][0] == last_track:
+                if track[i][1] <= last_stopped_cell:
+                    if track[i][2] - last_stopped_cell > 0:
+                        minus += track[i][2] - last_stopped_cell
+                        last_stopped_cell = track[i][2]
+                else:
+                    minus += track[i][2]-track[i][1]+1
+                    last_stopped_cell = track[i][2]
+            else:
+                number_of_cells += m-minus
+                unique_track_count += 1
+                minus = track[i][2] - track[i][1]+1
+                last_track = track[i][0]
+                last_stopped_cell = track[i][2]
+
+        if track[-1][0] == last_track:
+            if track[-1][1] <= last_stopped_cell:
+                if track[-1][2] - last_stopped_cell > 0:
+                    minus += track[-1][2] - last_stopped_cell
+                number_of_cells += m - minus
+            else:
+                minus += track[-1][2]-track[-1][1]+1
+                number_of_cells += m-minus
+        else:
+            number_of_cells += m-minus
+            unique_track_count += 1
+            minus = track[-1][2] - track[-1][1]+1
+            number_of_cells += m - minus
+
+    number_of_cells += (n-unique_track_count)*m
+    return number_of_cells
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    first_multiple_input = input().rstrip().split()
+
+    n = int(first_multiple_input[0])
+
+    m = int(first_multiple_input[1])
+
+    k = int(first_multiple_input[2])
+
+    track = []
+
+    for _ in range(k):
+        track.append(list(map(int, input().rstrip().split())))
+
+    result = gridlandMetro(n, m, k, track)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()
