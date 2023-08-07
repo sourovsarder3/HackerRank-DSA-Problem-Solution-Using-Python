@@ -1,0 +1,31 @@
+import math
+import os
+import random
+import re
+import sys
+
+def minimumLoss(price):
+    r_index = sorted(range(len(price)), key=lambda x: price[x], reverse=True)
+    min_loss = 10**16
+
+    for i in range(len(r_index)-1):
+        if r_index[i] < r_index[i+1]:
+            index1 = r_index[i]
+            index2 = r_index[i+1]
+            loss = price[index1] - price[index2]
+            min_loss = min(min_loss, loss)
+
+    return min_loss
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    n = int(input().strip())
+
+    price = list(map(int, input().rstrip().split()))
+
+    result = minimumLoss(price)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()
