@@ -1,0 +1,43 @@
+import math
+import os
+import random
+import re
+import sys
+from bisect import bisect_right
+
+
+def maximumSum(a, m):
+    prefix_sum_modulas = [0]
+    for item in a:
+        prefix_sum_modulas.append((prefix_sum_modulas[-1]+item) % m)
+    minimum_diffrence = m-(max(prefix_sum_modulas))
+    sorted_pref_sum_mod = [0]
+    for i in range(1, len(prefix_sum_modulas)):
+        if prefix_sum_modulas[i] < sorted_pref_sum_mod[-1]:
+            index = bisect_right(sorted_pref_sum_mod, prefix_sum_modulas[i])
+            minimum_diffrence = min(
+                minimum_diffrence, sorted_pref_sum_mod[index]-prefix_sum_modulas[i])
+            sorted_pref_sum_mod.insert(index, prefix_sum_modulas[i])
+        else:
+            sorted_pref_sum_mod.append(prefix_sum_modulas[i])
+    return m-minimum_diffrence
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    q = int(input().strip())
+
+    for q_itr in range(q):
+        first_multiple_input = input().rstrip().split()
+
+        n = int(first_multiple_input[0])
+
+        m = int(first_multiple_input[1])
+
+        a = list(map(int, input().rstrip().split()))
+
+        result = maximumSum(a, m)
+
+        fptr.write(str(result) + '\n')
+
+    fptr.close()
